@@ -1,25 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ApolloClient } from 'apollo-client';
+import { createUploadLink } from 'apollo-upload-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloProvider } from 'react-apollo';
+import Home from './components/Home';
+import Register from './components/Register';
 
 function App() {
+  const link = createUploadLink({
+    uri: "http://localhost:5000/graphql"
+  })
+
+  const client = new ApolloClient({
+    link,
+    cache: new InMemoryCache()
+  })
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <Router>
+        <Switch>
+          <Route path='/' exact component={Home} />
+          <Route path='/register' component={Register} />
+        </Switch>
+
+      </Router>
+
+    </ApolloProvider>
   );
 }
 
