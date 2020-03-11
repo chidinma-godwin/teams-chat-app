@@ -1,7 +1,7 @@
 import React from "react";
 import { List } from "semantic-ui-react";
 import { Query } from "react-apollo";
-import { allUsersQuery } from "../queries/userQueries";
+import { allUsersQuery } from "../queries";
 
 const Home = () => {
   return (
