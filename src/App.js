@@ -17,6 +17,7 @@ import Login from "./routes/Login";
 import CreateTeam from "./routes/CreateTeam";
 import { ApolloLink } from "apollo-link";
 import decode from "jwt-decode";
+import ViewTeam from "./routes/ViewTeams";
 
 // Check if the token is authenticated
 const isAuthenticated = () => {
@@ -101,6 +102,7 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
+          <Route path="/view-team" component={ViewTeam} />
 
           <PrivateRoute path="/create-team" component={CreateTeam} />
         </Switch>
