@@ -1,22 +1,63 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
 import { ApolloClient } from "apollo-client";
 // import { createUploadLink } from "apollo-upload-client";
 import { HttpLink } from "apollo-link-http";
 import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloProvider } from "react-apollo";
-import Home from "./components/Home";
-import Register from "./components/Register";
-import Login from "./components/Login";
-import CreateTeam from "./components/CreateTeam";
+import Home from "./routes/Home";
+import Register from "./routes/Register";
+import Login from "./routes/Login";
+import CreateTeam from "./routes/CreateTeam";
 import { ApolloLink } from "apollo-link";
+import decode from "jwt-decode";
+
+// Check if the token is authenticated
+const isAuthenticated = () => {
+  const token = localStorage.getItem("token");
+  const refreshToken = localStorage.getItem("refreshToken");
+
+  try {
+    decode(token);
+    decode(refreshToken);
+    console.log(decode(token), decode(refreshToken));
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      isAuthenticated() ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: { info: "Please login to create a team" }
+          }}
+        />
+      )
+    }
+  />
+);
 
 function App() {
   const link = new HttpLink({
     uri: "http://localhost:5000/graphql"
   });
 
+  // Middleware to add token and refresh token from local storage to request headers
   const authLink = setContext((_, { headers }) => {
     const token = localStorage.getItem("token");
     const refreshToken = localStorage.getItem("refreshToken");
@@ -30,6 +71,7 @@ function App() {
     };
   });
 
+  // Afterware to over-write expired token
   const addHeader = new ApolloLink((operation, forward) => {
     const { headers } = operation.getContext();
     console.log(headers);
@@ -59,7 +101,8 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
-          <Route path="/create-team" component={CreateTeam} />
+
+          <PrivateRoute path="/create-team" component={CreateTeam} />
         </Switch>
       </Router>
     </ApolloProvider>
