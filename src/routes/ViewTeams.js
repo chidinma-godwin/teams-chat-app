@@ -31,9 +31,7 @@ const ViewTeam = ({
         })[0];
 
         // If no team is selected, get the first team
-        !!filteredTeam ? (team = filteredTeam) : (team = allTeams[0]);
-
-        console.log(team);
+        filteredTeam ? (team = filteredTeam) : (team = allTeams[0]);
 
         let channel;
         // Get the channel selected through the url
@@ -44,13 +42,12 @@ const ViewTeam = ({
           ? (channel = team.channels[filteredChannel])
           : (channel = team.channels[0]);
 
-        console.log(filteredChannel);
-        console.log(channel);
-
         return (
           <AppLayout>
             <SideBar team={team} teams={allTeams} />
-            <PageHeader channelName={channel.name} />
+            <PageHeader
+              channelName={channel ? channel.name : "No Channel added yet"}
+            />
             <Messages>
               <ul>
                 <li />
@@ -58,7 +55,7 @@ const ViewTeam = ({
                 <li />
               </ul>
             </Messages>
-            <MessageInput channelName={channel.name} />
+            <MessageInput channelName={channel ? channel.name : "No Channel"} />
           </AppLayout>
         );
       }}

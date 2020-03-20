@@ -56,6 +56,15 @@ const ChannelItemLink = styled(NavLink).attrs({
   }
 `;
 
+const CustomLink = styled.a`
+  text-decoration: none;
+  color: #958993;
+
+  &:hover {
+    color: #fff;
+  }
+`;
+
 const Bubble = ({ on = true }) =>
   on ? (
     <Green role="img" arial-label="online status">
@@ -71,7 +80,8 @@ const Channels = ({
   username,
   channels,
   users,
-  toggleAddChannelModal
+  toggleAddChannelModal,
+  toggleInvitePeopleModal
 }) => {
   const channelList = channels.map(({ id, name }) => (
     <ChannelItemLink
@@ -107,6 +117,12 @@ const Channels = ({
         <PushRight>Direct Messages</PushRight>
         {userList}
       </SidebarList>
+
+      <PushRight>
+        <CustomLink href="#invite-people" onClick={toggleInvitePeopleModal}>
+          + Invite People
+        </CustomLink>
+      </PushRight>
     </ChannelWrapper>
   );
 };

@@ -1,20 +1,28 @@
 import React, { Component } from "react";
+import decode from "jwt-decode";
 import Teams from "./teams/Teams";
 import Channels from "./channels/Channels";
 import AddChannelModal from "./channels/AddChannelModal";
-import decode from "jwt-decode";
+import InvitePeopleModal from "./InvitePeopleModal";
 
 class SideBar extends Component {
   constructor() {
     super();
     this.state = {
-      showModal: false
+      showAddChannelModal: false,
+      showInvitePeopleModal: false
     };
   }
 
   toggleAddChannelModal = () => {
     this.setState(prevState => ({
-      showModal: !prevState.showModal
+      showAddChannelModal: !prevState.showAddChannelModal
+    }));
+  };
+
+  toggleInvitePeopleModal = () => {
+    this.setState(prevState => ({
+      showInvitePeopleModal: !prevState.showInvitePeopleModal
     }));
   };
 
@@ -46,11 +54,18 @@ class SideBar extends Component {
           { id: 2, name: "Harvey" }
         ]}
         toggleAddChannelModal={this.toggleAddChannelModal}
+        toggleInvitePeopleModal={this.toggleInvitePeopleModal}
       />,
       <AddChannelModal
-        key="modal"
-        showAddChannelModal={this.state.showModal}
+        key="add-channel-modal"
+        showAddChannelModal={this.state.showAddChannelModal}
         toggleAddChannelModal={this.toggleAddChannelModal}
+        currentTeamId={team.id}
+      />,
+      <InvitePeopleModal
+        key="invite-people-modal"
+        showInvitePeopleModal={this.state.showInvitePeopleModal}
+        toggleInvitePeopleModal={this.toggleInvitePeopleModal}
         currentTeamId={team.id}
       />
     ];
