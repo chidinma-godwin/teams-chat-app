@@ -58,7 +58,7 @@ class CreateTeam extends React.Component {
     if (!errors) {
       this.setState({
         name: "",
-        redirect: "/"
+        redirect: `/view-team/${data.data.createTeam.team.id}`
       });
     }
   };

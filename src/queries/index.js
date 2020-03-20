@@ -1,3 +1,4 @@
 import { allUsersQuery } from "./userQueries";
+import { allTeamsQuery } from "./teamQueries";
 
-export { allUsersQuery };
+export { allUsersQuery, allTeamsQuery };

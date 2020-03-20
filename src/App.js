@@ -25,9 +25,15 @@ const isAuthenticated = () => {
   const refreshToken = localStorage.getItem("refreshToken");
 
   try {
-    decode(token);
-    decode(refreshToken);
-    console.log(decode(token), decode(refreshToken));
+    const decodedToken = decode(token);
+    const decodedRefreshToken = decode(refreshToken);
+    console.log(decodedToken, decodedRefreshToken);
+
+    // If the refresh token as expired, redirect user to login page
+    if (decodedRefreshToken.exp <= Math.round(new Date().getTime() / 1000)) {
+      return false;
+    }
+
     return true;
   } catch (err) {
     console.log(err);
@@ -102,7 +108,7 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
-          <Route path="/view-team" component={ViewTeam} />
+          <Route path="/view-team/:teamId?/:channelId?" component={ViewTeam} />
 
           <PrivateRoute path="/create-team" component={CreateTeam} />
         </Switch>
