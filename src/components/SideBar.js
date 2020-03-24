@@ -14,13 +14,19 @@ class SideBar extends Component {
     };
   }
 
-  toggleAddChannelModal = () => {
+  toggleAddChannelModal = evt => {
+    if (evt) {
+      evt.preventDefault();
+    }
     this.setState(prevState => ({
       showAddChannelModal: !prevState.showAddChannelModal
     }));
   };
 
-  toggleInvitePeopleModal = () => {
+  toggleInvitePeopleModal = evt => {
+    if (evt) {
+      evt.preventDefault();
+    }
     this.setState(prevState => ({
       showInvitePeopleModal: !prevState.showInvitePeopleModal
     }));
@@ -29,11 +35,14 @@ class SideBar extends Component {
   render() {
     const { team, teams } = this.props;
     let username = "";
+    let userId = "";
     try {
       let token = localStorage.getItem("token");
       const { user } = decode(token);
       username = user.username;
+      userId = user.id;
     } catch (err) {}
+    const isOwner = Number(team.owner) === userId;
 
     return [
       <Teams
@@ -53,6 +62,7 @@ class SideBar extends Component {
           { id: 1, name: "Slackbot" },
           { id: 2, name: "Harvey" }
         ]}
+        isOwner={isOwner}
         toggleAddChannelModal={this.toggleAddChannelModal}
         toggleInvitePeopleModal={this.toggleInvitePeopleModal}
       />,

@@ -80,6 +80,7 @@ const Channels = ({
   username,
   channels,
   users,
+  isOwner,
   toggleAddChannelModal,
   toggleInvitePeopleModal
 }) => {
@@ -108,7 +109,9 @@ const Channels = ({
       <SidebarList>
         <PushRight>
           Channels{" "}
-          <Icon link name="add circle" onClick={toggleAddChannelModal} />
+          {isOwner && (
+            <Icon link name="add circle" onClick={toggleAddChannelModal} />
+          )}
         </PushRight>
         {channelList}
       </SidebarList>
@@ -118,11 +121,13 @@ const Channels = ({
         {userList}
       </SidebarList>
 
-      <PushRight>
-        <CustomLink href="#invite-people" onClick={toggleInvitePeopleModal}>
-          + Invite People
-        </CustomLink>
-      </PushRight>
+      {isOwner && (
+        <PushRight>
+          <CustomLink href="#invite-people" onClick={toggleInvitePeopleModal}>
+            + Invite People
+          </CustomLink>
+        </PushRight>
+      )}
     </ChannelWrapper>
   );
 };

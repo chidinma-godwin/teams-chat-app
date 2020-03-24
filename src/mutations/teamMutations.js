@@ -6,6 +6,12 @@ const createTeam = gql`
       ok
       team {
         id
+        name
+        channels {
+          id
+          name
+          public
+        }
       }
       errors {
         path

@@ -3,6 +3,7 @@ import { Container, Form, Button, Header, Message } from "semantic-ui-react";
 import { Mutation } from "react-apollo";
 import { createTeam } from "../mutations";
 import { Redirect } from "react-router-dom";
+import { allTeamsQuery } from "../queries";
 
 class CreateTeam extends React.Component {
   constructor() {
@@ -27,7 +28,16 @@ class CreateTeam extends React.Component {
     let { name } = this.state;
     try {
       data = await createTeam({
-        variables: { name }
+        variables: { name },
+        update: (store, { data: { createTeam } }) => {
+          const { ok, team } = createTeam;
+          if (!ok) return;
+          // read the teams query from the store data
+          const data = store.readQuery({ query: allTeamsQuery });
+          // Add the newly created team to the list of teams
+          data.myTeams.push(team);
+          store.writeQuery({ query: allTeamsQuery, data });
+        }
       });
     } catch (err) {
       this.setState({

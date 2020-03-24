@@ -23,7 +23,6 @@ class AddChannelModal extends React.Component {
     const firstLetter = values.name.charAt(0).toUpperCase();
     const otherLetters = values.name.slice(1);
     const capitalizeFirstLetter = firstLetter + otherLetters;
-    console.log(values.status === "public");
     try {
       data = await createChannel({
         variables: {
@@ -37,7 +36,7 @@ class AddChannelModal extends React.Component {
           __typename: "Mutation",
           createChannel: {
             __typename: "ChannelResponse",
-            ok: true,
+            ok: false,
             channel: {
               id: -1,
               name: capitalizeFirstLetter,
@@ -53,9 +52,9 @@ class AddChannelModal extends React.Component {
           // read the query from the store
           const data = store.readQuery({ query: allTeamsQuery });
           console.log(data);
-          const teamIdx = findIndex(data.allTeams, ["id", currentTeamId]);
+          const teamIdx = findIndex(data.myTeams, ["id", currentTeamId]);
           console.log(teamIdx);
-          data.allTeams[teamIdx].channels.push(channel);
+          data.myTeams[teamIdx].channels.push(channel);
           // updata the store with the data with the newly added channel
           store.writeQuery({ query: allTeamsQuery, data });
         }

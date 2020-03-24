@@ -23,6 +23,10 @@ class Login extends Component {
     };
   }
 
+  componentWillUnmount() {
+    this.props.location.state = undefined;
+  }
+
   handleChange = evt => {
     const { name, value } = evt.target;
     this.setState({
